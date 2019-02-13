@@ -1,0 +1,12 @@
+/*
+Theme Name:     The7 Child Active
+Theme URI:      http://the7.io/
+Description:    Child theme for the The7 Active
+Author:         Dream-Theme
+Author URI:     http://dream-theme.com/
+Template:       dt-the7new3
+Version:        1.0
+*/
+
+// стили родительской темы
+@import url("../dt-the7new3/style.css");
