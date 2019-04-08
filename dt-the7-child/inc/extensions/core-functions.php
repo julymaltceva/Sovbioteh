@@ -180,7 +180,8 @@ function dt_get_resized_img( $img, $opts, $resize = true, $is_retina = false ) {
  *
  * @return string
  */
-if (! function_exists ('dt_get_thumb_img')) :
+
+if ( ! function_exists ( 'dt_get_thumb_img' ) ) {
 function dt_get_thumb_img( $opts = array() ) {
 	global $post;
 
@@ -202,9 +203,6 @@ function dt_get_thumb_img( $opts = array() ) {
 		'options' => array(),
 		'default_img' => $default_image,
 		'prop' => false,
-		'lazy_loading' => false,
-		'lazy_class'    => 'lazy-load',
-		'lazy_bg_class' => 'layzr-bg',
 		'echo' => true,
 	);
 	$opts = wp_parse_args( $opts, $defaults );
@@ -282,6 +280,11 @@ function dt_get_thumb_img( $opts = array() ) {
 		}
 	}
 
+	$class = empty( $opts['class'] ) ? '' : 'class="' . esc_attr( trim($opts['class']) ) . '"';
+	$title = empty( $opts['title'] ) ? '' : 'title="' . esc_attr( trim($opts['title']) ) . '"';
+	$img_title = empty( $opts['img_title'] ) ? '' : 'title="' . esc_attr( trim($opts['img_title']) ) . '"';
+	$img_class = empty( $opts['img_class'] ) ? '' : 'class="' . esc_attr( trim($opts['img_class']) ) . '"';
+
 	$href = $opts['href'];
 	if ( !$href ) {
 		$href = $original_image[0];
@@ -296,6 +299,7 @@ function dt_get_thumb_img( $opts = array() ) {
 		$size = $resized_image[3];
 	}
 
+//	$lazy_loading_src = "data:image/svg+xml,%3Csvg xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg' viewBox%3D'0 0 $_width $_height'%2F%3E";
 	$lazy_loading_src = "data:image/svg+xml,%3Csvg%20xmlns%3D&#39;http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg&#39;%20viewBox%3D&#39;0%200%20{$_width}%20{$_height}&#39;%2F%3E";
 
 	$lazy_loading = ! empty( $opts['lazy_loading'] );
@@ -311,25 +315,14 @@ function dt_get_thumb_img( $opts = array() ) {
 			$src_att .= ', ' . sprintf( $srcset_tpl, esc_attr( $hd_src ), $resized_image_hd[1] );
 		}
 		$src_att = 'src="' . $lazy_loading_src . '" data-src="' . $esc_src . '" data-srcset="' . $src_att . '"';
-		$opts['img_class'] .= ' ' . $opts['lazy_class'];
-		$opts['class'] .= ' ' . $opts['lazy_bg_class'];
 	} else {
 		$src_att = sprintf( $srcset_tpl, $src, $resized_image[1] );
 		if ( $resized_image_hd ) {
-			/*$src_att .= ', ' . sprintf( $srcset_tpl, $hd_src, $resized_image_hd[1] );*/
+			$src_att .= ', ' . sprintf( $srcset_tpl, $hd_src, $resized_image_hd[1] );
 		}
 		$src_sizes = $resized_image[1] . 'px';
 		$src_att = 'src="' . esc_attr( $src ) . '" srcset="' . esc_attr( $src_att ) . '" sizes="' . esc_attr( $src_sizes ) . '"';
-		/*$src_att = 'src="' . esc_attr( $src ) . '" ';*/
 	}
-
-
-
-
-	$class = empty( $opts['class'] ) ? '' : 'class="' . esc_attr( trim($opts['class']) ) . '"';
-	$title = empty( $opts['title'] ) ? '' : 'title="' . esc_attr( trim($opts['title']) ) . '"';
-	$img_title = empty( $opts['img_title'] ) ? '' : 'title="' . esc_attr( trim($opts['img_title']) ) . '"';
-	$img_class = empty( $opts['img_class'] ) ? '' : 'class="' . esc_attr( trim($opts['img_class']) ) . '"';
 
 	$output = str_replace(
 		array(
@@ -376,7 +369,7 @@ function dt_get_thumb_img( $opts = array() ) {
 
 	return $output;
 }
-endif;
+}
 
 /**
  * Load presscore template.
@@ -421,6 +414,7 @@ function dt_get_of_uploaded_image( $src ) {
 
 	return $uri;
 }
+
 
 function dt_maybe_uploaded_image_url( $url ) {
 	$uploads = wp_upload_dir();
